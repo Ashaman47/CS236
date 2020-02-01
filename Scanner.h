@@ -18,7 +18,7 @@ public:
 	void Tokenize();
 	string value;
 	void PrintEOF();
-
+	vector<Token>tokenlist;
 private:
 	int stringfunc(int i,int linenum);
 	int linenum;
@@ -28,4 +28,5 @@ private:
 	string filename;
 	void commentfunc();
 	int i;
+	
 };

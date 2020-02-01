@@ -1,5 +1,6 @@
 #include "Scanner.h"
 #include "Token.h"
+#include "Parser.h"
 #include <cctype>
 #include <vector>
 #include <cstdio>
@@ -125,8 +126,6 @@ void Scanner::Tokenize() {
 					linenum++;
 				}
 			}
-			Token token(type, value, oldline);
-			token.printTokens();
 			TotalTokens++;
 			value.clear();
 		}
@@ -142,7 +141,7 @@ void Scanner::Tokenize() {
 		if (value != "") {
 			if (input[i] != '#' ) {
 				Token token(type, value, linenum);
-				token.printTokens();
+				tokenlist.push_back(token);
 				TotalTokens++;
 				value.clear();
 			}
@@ -155,8 +154,7 @@ void Scanner::Tokenize() {
 }
 
 void Scanner::PrintEOF() {
-	cout << "(EOF,\"\"," << linenum << ")" << endl;
-	cout << "Total Tokens = " << TotalTokens << endl;
+	Parser parser(tokenlist);
 	return;
 }
 
@@ -176,7 +174,7 @@ int Scanner::stringfunc(int i, int funcstartline) {
 		else {
 			type = "UNDEFINED";
 			Token token(type, value, oldline);
-			token.printTokens();
+			tokenlist.push_back(token);
 			TotalTokens++;
 			PrintEOF();
 			
@@ -194,7 +192,7 @@ int Scanner::stringfunc(int i, int funcstartline) {
 	if (i != -1) {
         if (value != ""){
 		Token token(type, value, oldline);
-		token.printTokens();
+		tokenlist.push_back(token);
 		TotalTokens++;
 		value.clear();
         }

@@ -12,6 +12,5 @@ using namespace std;
 int main(int argc, char* argv[]) {
 	string filename = argv[1];
 	Scanner scanner(filename);
-
 	return 0;
 }
