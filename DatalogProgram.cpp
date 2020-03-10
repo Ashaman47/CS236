@@ -34,7 +34,7 @@ void DatalogProgram::addDomain(string f){
 void DatalogProgram::Print(){
     cout << "Schemes(" << SchemesList.size() << "):" << endl;
     for (unsigned int i = 0; i < SchemesList.size(); ++i){
-        cout << "  " << SchemesList[i].toString() << "." << endl;
+        cout << "  " << SchemesList[i].toString() << endl;
     }
     cout << "Facts(" << FactsList.size() << "):" << endl;
     for (unsigned int i = 0; i < FactsList.size(); ++i){
@@ -50,7 +50,7 @@ void DatalogProgram::Print(){
     }
     cout << "Domain(" << DomainList.size() << "):" << endl;
     for (unsigned int i = 0; i < DomainList.size(); ++i){
-        cout << DomainList[i] << endl;
+        cout << "  " << DomainList[i] << endl;
     }
     
 }

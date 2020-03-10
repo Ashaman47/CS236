@@ -1,0 +1,20 @@
+snap(Id,'Snoopy',A,A)? Yes(1)
+  Id='33333', A='555'
+csg(Course,'33333',Grade)? Yes(2)
+  Course='CS101', Grade='A-'
+  Course='EE200', Grade='B'
+cp(Course,Course)? Yes(2)
+  Course='CS205'
+  Course='EE200'
+cdh('EE200',Day,Hour)? Yes(3)
+  Day='F', Hour='10AM'
+  Day='M', Hour='10AM'
+  Day='W', Hour='1PM'
+cr('CS101',Room)? Yes(1)
+  Room='Turing Aud.'
+tthCourses(C)? No
+before('CS100','CS206')? No
+before('CS100',prerequisiteTo)? No
+Schedule('Snoopy',C,R,D,H)? No
+Grades('Snoopy',C,G)? No
+Students('CS101',R,N,G)? No

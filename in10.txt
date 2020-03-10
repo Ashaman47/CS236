@@ -11,10 +11,10 @@ Schemes:
    Students(C,R,N,G)
  
 Facts:
-   snap('12345','C. Brown','12 Apple St.','555-1234').
+   snap('12345','C. Brown','555','555').
    snap('67890','L. Van Pelt','34 Pear Ave.','555-5678').
    snap('22222','P. Patty','56 Grape Blvd.','555-9999').
-   snap('33333','Snoopy','12 Apple St.','555-1234').
+   snap('33333','Snoopy','555','555').
    csg('CS101','12345','A').
    csg('CS101','67890','B').
    csg('EE200','12345','C').
@@ -23,16 +23,16 @@ Facts:
    csg('CS101','33333','A-').
    csg('PH100','67890','C+').
    cp('CS101','CS100').
-   cp('EE200','EE005').
+   cp('EE200','EE200').
    cp('EE200','CS100').
    cp('CS120','CS101').
-   cp('CS121','CS120').
+   cp('CS120','CS120').
    cp('CS205','CS101').
    cp('CS206','CS121').
    cp('CS206','CS205').
    cdh('CS101','Tu','10AM').
    cdh('EE200','M','10AM').
-   cdh('EE200','W','1PM').
+   cdh('W','W','1PM').
    cdh('EE200','F','10AM').
    cdh('PH100','Th','11AM').
    cr('CS101','Turing Aud.').
@@ -49,10 +49,10 @@ Rules:
    Students(C,R,N,G) :- snap(S,N,A,P),csg(C,S,G),cr(C,R).
  
 Queries:
-   snap(Id,'Snoopy',A,P)?
+   snap(Id,'Snoopy',A,A)?
    csg(Course,'33333',Grade)?
-   cp(Course,'CS100')?
-   cdh('EE200',Day,Hour)?
+   cp(Course,Course)?
+   cdh(Day,Day,Hour)?
    cr('CS101',Room)?
    tthCourses(C)?
    before('CS100','CS206')?
