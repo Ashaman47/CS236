@@ -4,6 +4,7 @@
 #include "DatalogProgram.h"
 #include "Predicate.h"
 #include "Rules.h"
+#include "Database.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -18,6 +19,12 @@ class Parser{
     Parser(vector<Token>tokenlist);
     DatalogProgram DLP;
     Predicate Pred;
+    Database DB;
+    Scheme scheme;
+    Tuple tuple;
+    vector<string>queries;
+    vector<int>isConstant;
+    int querycheck = 0;
     Rules R;
     private:
     string Domain;

@@ -37,15 +37,14 @@ void Parser::ParseDatalogProgram(){
         tokenList[currenttoken].printTokens();
         exit(0);
     }
-    cout << "SUCCESS!" << endl;
+    cout << "Success!" << endl;
     exit(0);
 }
 void Parser::match(string currenttype){
     if (tokenList[currenttoken].returnType() == currenttype){
         currenttoken++;
         if (tokenList.size() == static_cast<unsigned int>(currenttoken)){
-            cout << "SUCCESS!"<< endl;
-            DLP.Print();
+            DB.printDatabase();
             exit(0);
         }
     }
@@ -57,14 +56,19 @@ void Parser::match(string currenttype){
     return;
 }
 void Parser::ParseSchemes(){
+
     Pred = Predicate(tokenList[currenttoken].returnValue());
     match("ID");
+    string ID = tokenList[currenttoken - 1].returnValue();
     match("LEFT_PAREN");
     match("ID");
     Pred.AddParam(tokenList[currenttoken - 1].returnValue());
+    scheme.addScheme(tokenList[currenttoken - 1].returnValue());
     ParseIdList();
     match("RIGHT_PAREN");
+    DB.addRelation(ID, scheme);
     DLP.addSchemes(Pred);
+    scheme.deleteScheme();
 }
 void Parser::ParseSchemesList(){
     if (tokenList[currenttoken].returnType() == "ID"){
@@ -78,6 +82,7 @@ void Parser::ParseIdList(){
         match("COMMA");
         match("ID");
         Pred.AddParam(tokenList[currenttoken - 1].returnValue());
+        scheme.addScheme(tokenList[currenttoken - 1].returnValue());
         ParseIdList();
     }
     else{
@@ -89,14 +94,18 @@ void Parser::ParseFacts(){
     if (tokenList[currenttoken].returnType() == "ID"){
     Pred = Predicate(tokenList[currenttoken].returnValue());
     match("ID");
+    string ID = tokenList[currenttoken - 1].returnValue();
     match("LEFT_PAREN");
     match("STRING");
     Pred.AddParam(tokenList[currenttoken - 1].returnValue());
     DLP.addDomain(tokenList[currenttoken - 1].returnValue());
+    tuple.addTuple(tokenList[currenttoken -1].returnValue());
     ParseStringList();
     match("RIGHT_PAREN");
     match("PERIOD");
     DLP.addFacts(Pred);
+    DB.addTuplesToRelation(ID, tuple);
+    tuple.deleteTuple();
     }
     else if (tokenList[currenttoken].returnType() == "RULES"){}
     else {
@@ -120,6 +129,7 @@ void Parser::ParseStringList(){
         match("STRING");
         Pred.AddParam(tokenList[currenttoken - 1].returnValue());
         DLP.addDomain(tokenList[currenttoken - 1].returnValue());
+        tuple.addTuple(tokenList[currenttoken -1].returnValue());
         ParseStringList();
     }
     else{}
@@ -166,11 +176,19 @@ void Parser::ParseHeadPredicate(){
 void Parser::ParsePredicate(){
     Pred = Predicate(tokenList[currenttoken].returnValue());
     match("ID");
+    if (querycheck == 1){
+    isConstant.push_back(0);
+    queries.push_back(tokenList[currenttoken - 1].returnValue());
+    }
+    
     match("LEFT_PAREN");
     ParseParameter();
     ParseParameterList();
     match("RIGHT_PAREN");
     R.addRule(Pred);
+    DB.checkQuery(queries,isConstant);
+    queries.clear();
+    isConstant.clear();
     return;
 }
 void Parser::ParsePredicateList(){
@@ -192,9 +210,11 @@ void Parser::ParseParameterList(){
     return;
 }
 void Parser::ParseQueries(){
+    querycheck = 1;
     ParsePredicate();
     DLP.addQueries(Pred);
     match("Q_MARK");
+    querycheck = 0;
     return;
 }
 void Parser::ParseQueriesList(){
@@ -207,14 +227,19 @@ void Parser::ParseQueriesList(){
 }
 void Parser::ParseParameter() {
     if (tokenList[currenttoken].returnType() == "STRING"){
-    match("STRING");
-    
+        match("STRING");
+        queries.push_back(tokenList[currenttoken - 1].returnValue());
+        isConstant.push_back(1);
     }
     else if (tokenList[currenttoken].returnType() == "ID"){
         match("ID");
+        
+        queries.push_back(tokenList[currenttoken - 1].returnValue());
+        isConstant.push_back(2);
     }
     else if (tokenList[currenttoken].returnType() == "LEFT_PAREN"){
         ParseExpression();
+        return;
     }
     else{
         cout << "Failure!" << endl;
@@ -226,10 +251,12 @@ void Parser::ParseParameter() {
 }
 void Parser::ParseExpression(){
     match("LEFT_PAREN");
+    Pred.AddParam(tokenList[currenttoken - 1].returnValue());
     ParseParameter();
     ParseOperator();
     ParseParameter();
     match("RIGHT_PAREN");
+    Pred.AddParam(tokenList[currenttoken - 1].returnValue());
     return;
 }
 void Parser::ParseOperator(){
@@ -244,4 +271,5 @@ void Parser::ParseOperator(){
         tokenList[currenttoken].printTokens();
         exit(0);
     }
+    Pred.AddParam(tokenList[currenttoken - 1].returnValue());
 }

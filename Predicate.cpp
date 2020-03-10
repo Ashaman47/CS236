@@ -16,8 +16,13 @@ string Predicate::toString(){
     stringstream ss;
     ss << ID << "(";
     for(unsigned int i = 0; i < ParamList.size(); i++){
-		if(i == 0){
+		if(i == 0 ||ParamList[i].toString() == ")"||ParamList[i - 1].toString() == "("){
 			ss << ParamList[i].toString();
+		}
+		else if (ParamList[i].toString() == "+" ||ParamList[i].toString() == "*") {
+		    ss << ParamList[i].toString();
+		    ++i;
+		    ss << ParamList[i].toString();
 		}
 		else{
 			ss << "," << ParamList[i].toString();
